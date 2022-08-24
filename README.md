@@ -8,9 +8,9 @@ CarryPass is an offline password manager with 256-bit AES encryption and Time-ba
 Exctract the files to a USB storage device, and start the CarryPass.exe application.
 The application creates three folders in the root folder of your device:
 
-1.carrypass_database
-2.carrypass_images
-3.carrypass_keys
+1. carrypass_database
+2. carrypass_images
+3. carrypass_keys
 
 #### carrypass_database
 
