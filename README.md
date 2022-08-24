@@ -50,6 +50,8 @@ a second factor of authentication for login or not.
 
 ## Videos
 
+I believe that a picture is worth a thousand words, not to mention a video.
+Visuals of the features are available on the [CarryPass demos](https://www.youtube.com/channel/UCtSK10tYJpb1mhcC2K_osEQ) YouTube channel.
 
 
 
