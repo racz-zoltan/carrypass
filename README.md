@@ -2,10 +2,14 @@
 
 CarryPass is the offline password manager for those who need extra privacy, with 256-bit AES encryption and Time-based one time password as a second factor of authentication.
 
+<p align="center">
+<img src="https://github.com/racz-zoltan/carrypass/blob/main/carrypass_demo_image.png">
+</p>
+
 
 ## Installation
 
-Exctract the files to a USB storage device, and start the CarryPass.exe application.
+Exctract the files to a USB storage device, and launch the CarryPass.exe application.
 The application creates three folders in the root folder of your device:
 
 1. carrypass_database
