@@ -48,6 +48,27 @@ the behaviour of the application in relation with that future device; how long i
 a second factor of authentication for login or not.
 
 
+## Two factor authentication
+
+> Besides using it for the application, you should always consider setting up two factor authentication for every site you register with if there is such an option.
+
+## Backups
+
+> You are encouraged to make regular backups of the 'carrypass_' folders.
+
+## No data recovery
+
+> If you forget the master password, or in case 2FA is set up for the application and the one time password is not available for any reason, there is no way to recover data stored by the application.
+
+## Internet connection
+
+> Only pwned password check needs internet connection. These checks are not automated so the application does not perform regular checks to report passwords that have been exposed in data breaches. 
+You can control when to perform these checks, or decide if you want to use this feature at all.
+
+## Lost or stolen device
+
+> You should always assume that your passwords have been compromised if you lose the device where your passwords are stored, or the device is stolen. In that case you are advised to change all your passwords.
+
 ## Videos
 
 I believe that a picture is worth a thousand words, not to mention a video.
