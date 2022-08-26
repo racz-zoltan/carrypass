@@ -1,0 +1,976 @@
+# Copyright 2022 Rácz Zoltán
+
+
+#:import CustomOverFlowMenu __main__.CustomOverFlowMenu
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+WindowManager:
+	LoginWindow:
+        id: activate
+    OTPWindow:
+        id: otplogin
+    MainViewWindow:
+        id: mainview
+    EditListItemWindow:
+        id: edititem
+    EditPasswordWindow:
+        id: editpassword
+    WebbrowserSettingsWindow:
+        id: webbrowser
+    FutureSettingsWindow:
+        id: futuresettings
+    DeviceSettingsWindow:
+        id: devicesettings
+    ProcessingRequestWindow:
+        id: requestprocess
+    StarterWindow:
+        id: starterwindow
+    ApplicationWindow:
+        id: application
+
+
+
+<FloatButton@FloatLayout>
+    id: float_root 
+    size_hint: (None, None)
+    text: ''
+    btn_size: (70, 70)
+    size: (70, 70)
+    bg_color: (0.404, 0.227, 0.718, 1.0)
+    pos_hint: {'x': .6}
+ 
+
+    Button:
+        text: float_root.text
+        markup: True
+        font_size: 40
+        size_hint: (None, None)
+        size: float_root.btn_size
+        pos_hint: {'x': 5.5, 'y': 3.8}
+        background_normal: ''
+        background_color: (0, 0, 0, 0)
+        canvas.before:
+            Color:
+                rgba: (0.404, 0.227, 0.718, 1.0)
+            Ellipse:
+                size: self.size
+                pos: self.pos
+
+
+<Check@MDCheckbox>:
+    group: 'group'
+    size_hint: None, None
+    size: dp(48), dp(48)
+
+
+
+
+
+
+<LoginWindow>:
+	name: "login"
+    id: activate
+
+	MDBoxLayout:
+		orientation: "vertical"
+		size: root.width, root.height
+
+
+        MDTopAppBar:
+            type_height: "small"
+            md_bg_color: get_color_from_hex("#21004b")
+            right_action_items: [["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+
+        MDLabel:
+            id: login_label
+            halign: "center"
+            pos_hint: {"center_x": 0.5, "center_y":0.3}
+            theme_text_color: "Primary"
+            font_size: '16sp'
+            color: get_color_from_hex("#D70026")
+
+
+
+        MDTextField:
+            id: password
+            hint_text: "Master Password"
+            icon_right: "shield-key"
+            halign: "center"
+            size_hint_x: .6
+            font_size: '24sp'
+            pos_hint: {"center_x": 0.5}
+            password: True
+            password_mask: root.password_mask
+            mode: "rectangle"
+            on_text_validate: app.activate() 
+ 
+
+        Widget:
+            size_hint_y: None
+            height: 100           
+
+
+        Widget:
+            size_hint_y: None
+            height: 100
+
+
+
+<OTPWindow>:
+	name: "one-time-pass"
+    id: otplogin
+
+	MDBoxLayout:
+		orientation: "vertical"
+		size: root.width, root.height
+
+        MDTopAppBar:
+            type_height: "small"
+            md_bg_color: get_color_from_hex("#21004b")
+            right_action_items: [["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDLabel:
+            halign: "center"
+            pos_hint: {"center_x": 0.5, "center_y":0.3}
+            theme_text_color: "Primary"
+            font_style: "H5"
+
+
+        MDTextField:
+            id: onetimepass
+            hint_text: "One Time Password"
+            icon_right: "lock-clock"
+            size_hint_x: .6
+            halign: "center"
+            font_size: '24sp'
+            pos_hint: {"center_x": 0.5}
+            password: True
+            password_mask: root.password_mask
+            mode: "rectangle"
+            input_filter: 'int'
+            on_text_validate: app.release_one_time_pass()
+
+
+        Widget:
+            size_hint_y: None
+            height: 100           
+
+
+        Widget:
+            size_hint_y: None
+            height: 100
+
+
+
+
+<StarterWindow>:
+	name: "starterwindow"
+    id: starterwindow
+
+	MDBoxLayout:
+		orientation: "vertical"
+		size: root.width, root.height
+
+        MDTopAppBar:
+            type_height: "small"
+            md_bg_color: get_color_from_hex("#21004b")
+            right_action_items: [["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDLabel:
+            halign: "center"
+            pos_hint: {"center_x": 0.5, "center_y":0.3}
+            theme_text_color: "Primary"
+            font_size: '16sp'
+            text: "Application start up"
+
+        MDTextField:
+            id: startpassword
+            hint_text: "Master Password"
+            icon_right: "account-edit-outline"
+            halign: "center"
+            size_hint_x: .65
+            font_size: '18sp'
+            pos_hint: {"center_x": 0.5}
+            mode: "rectangle"
+            required: True
+            on_text_validate: app.populate_masterpass()
+
+
+
+        Widget:
+            size_hint_y: None
+            height: 100           
+
+
+        Widget:
+            size_hint_y: None
+            height: 100
+
+
+
+<MainViewWindow>:
+	name: "mainview"
+    id: mainview
+    MDBottomNavigation:
+        name: 'bottomnav'
+        panel_color: get_color_from_hex("#eceff1") 
+        selected_color_background: get_color_from_hex("#5d76cb")
+        text_color_active: 0, 0, 0, 1
+
+
+        MDBottomNavigationItem:
+            name: 'screen1'
+            text: 'Home'
+            icon: 'home-search-outline'
+            on_tab_press: app.timeout_app()
+            on_tab_release: app.list_login_pages()
+            MDBoxLayout:
+                orientation: "vertical"
+
+                MDTopAppBar:
+                    id: mypagesbar
+                    type_height: "small"
+                    overflow_cls: CustomOverFlowMenu()
+                    md_bg_color: get_color_from_hex("#21004b")
+                    left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+                    right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+                    elevation: 10
+
+
+                MDTopAppBar:
+                    type_height: "small"
+                    title: "My Pages"
+                    overflow_cls: CustomOverFlowMenu()
+                    elevation: 10
+
+
+                MDTextField:
+                    id: search_field
+                    hint_text: 'Search for a login page'
+                    icon_left: 'magnify'
+                    size_hint: (.8, .25)
+                    pos_hint: {'x':.1, 'y':0.2 }
+                    on_text: app.list_login_pages(self.text, True)
+
+
+
+                RecycleView:
+                    id: rv_url
+                    key_viewclass: 'viewclass'
+                    key_size: 'height'
+
+                    RecycleBoxLayout:
+                        padding: dp(10)
+                        default_size: None, dp(68)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
+
+
+
+                MDFloatingActionButtonSpeedDial:
+                    id: addnewfloat
+                    data: app.loginmenu
+                    root_button_anim: True                    
+                    size_hint: (.1, .1)
+                    pos_hint: {'x':-.9, 'y':-.2 }
+                    callback: app.addnewcallback
+
+
+
+
+        MDBottomNavigationItem:
+            name: 'screen2'
+            text: 'Notes'
+            icon: 'note-edit-outline'
+            on_tab_press: app.timeout_app()
+            
+            MDBoxLayout:
+                orientation: "vertical"
+
+                MDTopAppBar:
+                    id: privatenotesbar
+                    type_height: "small"
+                    overflow_cls: CustomOverFlowMenu()
+                    md_bg_color: get_color_from_hex("#21004b")
+                    left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+                    right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+                    elevation: 10
+
+                MDTopAppBar:
+                    type_height: "small"
+                    id: notestopbar
+                    title: "My Notes"
+                    overflow_cls: CustomOverFlowMenu()
+                    left_action_items: [["numeric-1-box-outline", lambda x: app.reveal_secret_text_one(), "Open Note 1", "Open Note 1"]]
+                    right_action_items:[["numeric-2-box-outline", lambda x: app.reveal_secret_text_two(), "Open Note 2", "Open Note 2"]]
+                    elevation: 10
+
+
+                MDFloatLayout:
+                    MDTextField:
+                        id: privatenotes
+                        hint_text: "Private Note"
+                        size_hint: (.8, .99)
+                        pos_hint: {'x':.1, 'y':0 }
+                        mode: "rectangle"
+                        multiline: True
+                        text_color_focus: get_color_from_hex("#21004b")
+
+                
+
+                MDFloatingActionButtonSpeedDial:
+                    id: notesfloat
+                    data: app.notemenu
+                    root_button_anim: True                    
+                    size_hint: (.1, .1)
+                    pos_hint: {'x':-.9, 'y':-.2 }
+                    callback: app.notescallback
+
+
+
+
+        MDBottomNavigationItem:
+            name: 'screen3'
+            text: 'Trust'
+            icon: 'security'
+            on_tab_press: app.timeout_app()
+            on_tab_release: app.list_all_devices()
+            MDBoxLayout:
+                orientation: "vertical"
+
+                MDTopAppBar:
+                    id: trustbar
+                    type_height: "small"
+                    overflow_cls: CustomOverFlowMenu()
+                    md_bg_color: get_color_from_hex("#21004b")
+                    left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+                    right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+                    elevation: 10
+
+                MDTopAppBar:
+                    type_height: "small"
+                    title: "Trust Settings"
+                    overflow_cls: CustomOverFlowMenu()
+                    left_action_items: [["transfer", lambda x: app.future_settings(), "Future Settings", "Future Settings"]]
+                    right_action_items:
+                        [
+                        ["map-marker-radius-outline", lambda x: app.list_current_device_only(), "Select current device", "Select current device"],
+                        ]
+                    elevation: 10
+
+                Widget:
+                    size_hint_y: None
+                    height: 4
+
+                Image:
+                    id: qr_image
+                    spacing: "-10dp"
+                    allow_stretch: False
+                    keep_ratio: True
+
+
+                RecycleView:
+                    id: rv_dev
+                    key_viewclass: 'viewclass'
+                    key_size: 'height'
+
+                    RecycleBoxLayout:
+                        padding: dp(10)
+                        default_size: None, dp(68)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
+
+                MDFloatingActionButtonSpeedDial:
+                    id: devicesfloat
+                    data: app.devicesmenu
+                    root_button_anim: True                    
+                    size_hint: (.1, .1)
+                    pos_hint: {'x':-.9, 'y':-.2 }
+                    callback: app.devicescallback
+
+
+
+<FutureSettingsWindow>:
+	name: "futuresettings"
+    id: futuresettings
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: futuretopbar
+            type_height: "small"
+            overflow_cls: CustomOverFlowMenu()
+            md_bg_color: get_color_from_hex("#21004b")
+            left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+            right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDTopAppBar:
+            title: "Future Settings"
+            overflow_cls: CustomOverFlowMenu()
+            left_action_items: [["keyboard-backspace", lambda x: app.back_to_device_settings(), "Back to Trust Settings", "Back to Trust Settings"]]
+            right_action_items:
+                [
+                ["account-lock", lambda x: app.deny_all_newdevices(), "Deny access on further devices", "Deny access on further devices"],
+                ]
+            elevation: 10
+
+        Widget:
+            size_hint_y: None
+            height: 50
+
+
+
+        MDTextField:
+            id: timeoftrust
+            hint_text: "Time of trust"
+            icon_right: "lock-clock"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5, "center_y":0.7}
+            mode: "rectangle"
+            input_filter: 'int'
+            required: True
+            on_text_validate: app.save_newdevice_settings()
+
+
+
+        FloatLayout:
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.37, "center_y": 0.7}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "One Time Password"
+                color: get_color_from_hex("#21004b")
+
+
+            MDSwitch:
+                id: twofa_switch
+                pos_hint: {'center_x': 0.73, 'center_y': 0.7}
+                width: dp(50)
+                on_active: app.on_futuredevice_checkbox_active(*args)
+
+
+        Widget:
+            size_hint_y: None
+            height: 70
+
+
+
+        Widget:
+            size_hint_y: None
+            height: 150      
+
+
+<EditListItemWindow>:
+	name: "itemedit"
+    id: edititem
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: selectedpagebar
+            type_height: "small"
+            overflow_cls: CustomOverFlowMenu()
+            md_bg_color: get_color_from_hex("#21004b")
+            left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+            right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDTopAppBar:
+            title: "Selected Page"
+            overflow_cls: CustomOverFlowMenu()
+            left_action_items: [["keyboard-backspace", lambda x: app.back_to_main_view(), "Back to My Pages", "Back to My Pages"]]
+            right_action_items:
+                [
+                ["open-in-app", lambda x: app.check_secure_connection_before_open_and_login(), "Log into this app", "Log into this app"],
+                ]
+            elevation: 10
+
+
+
+        Widget:
+            size_hint_y: None
+            height: 15
+
+        MDTextField:
+            id: nickname
+            hint_text: "Title"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5}
+            mode: "rectangle"
+            required: True
+            on_text_validate: app.save_selected_page()
+
+        Widget:
+            size_hint_y: None
+            height: 15
+
+        MDTextField:
+            id: username
+            hint_text: "Username"
+            icon_right: "card-account-details-outline"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5}
+            mode: "rectangle"
+            required: True
+            on_text_validate: app.save_selected_page()
+
+
+
+        FloatLayout:
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.35, "center_y": 0.5}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "Two-page login"
+                color: get_color_from_hex("#21004b")
+
+
+            MDSwitch:
+                id: twopage_switch
+                pos_hint: {'center_x': .73, 'center_y': .5}
+                width: dp(50)
+                on_active: app.on_selectpage_checkbox_active(*args)
+
+
+
+        Widget:
+            size_hint_y: None
+            height: 10
+
+
+
+        MDRectangleFlatButton:
+            id: username_check
+            text: "Capture username entry label and box"
+            font_size: '14sp'
+            pos_hint: {"center_x": 0.5, "center_y":0.5}
+
+
+        Widget:
+            size_hint_y: None
+            height: 20
+
+
+
+
+        MDRectangleFlatButton:
+            id: password_check
+            text: "Capture password entry label and box"
+            font_size: '14sp'
+            pos_hint: {"center_x": 0.5, "center_y":0.5}
+ 
+
+        Widget:
+            size_hint_y: None
+            height: 40
+
+
+        MDRectangleFlatButton:
+            text: "Delete Page"
+            font_size: '12sp'
+            width: 100
+            pos_hint: {"center_x": 0.5, "center_y":0.5}
+            text_color: 1, 0, 0, 1
+            on_press: app.show_delete_record_dialog()
+
+        Widget:
+            size_hint_y: None
+            height: 30
+
+
+
+        MDFloatingActionButtonSpeedDial:
+            id: edititemfloat
+            data: app.selectedpagemenu
+            callback: app.editcallback
+            root_button_anim: True                    
+            size_hint: (.1, .1)
+            pos_hint: {'x':-.9, 'y':-.2 }
+
+        Widget:
+            size_hint_y: None
+            height: 50
+
+
+
+
+
+<EditPasswordWindow>:
+	name: "editpassword"
+    id: editpassword
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: passwordbar
+            type_height: "small"
+            overflow_cls: CustomOverFlowMenu()
+            md_bg_color: get_color_from_hex("#21004b")
+            left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+            right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDTopAppBar:
+            title: "Edit Password"
+            overflow_cls: CustomOverFlowMenu()
+            left_action_items: [["keyboard-backspace", lambda x: app.back_to_edit_view(), "Back to Selected Page", "Back to Selected Page"]]
+            right_action_items:
+                [
+                ["table-key", lambda x: app.display_password(), "Copy current password to clipboard", "Copy current password to clipboard"],
+                ]
+            elevation: 10
+
+
+
+        FloatLayout:
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.35, "center_y": 0.4}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "Special characters"
+                color: get_color_from_hex("#21004b")
+
+
+            MDSwitch:
+                id: special_characters
+                pos_hint: {'center_x': .73, 'center_y': 0.4}
+                width: dp(50)
+
+
+
+
+        MDTextField:
+            id: pwd_length
+            hint_text: "Password length"
+            icon_right: "form-textbox-password"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5, "center_y": 1}
+            mode: "rectangle"
+            required: True
+            input_filter: 'int'
+
+        Widget:
+            size_hint_y: None
+            height: 40
+
+        MDRaisedButton:
+            text: "Create a new password"
+            font_size: '16sp'
+            size_hint_x: .65
+            pos_hint: {"center_x": 0.5, "center_y":0.15}
+            on_press: app.confirm_login_before_password_change()
+
+        Widget:
+            size_hint_y: None
+            height: 60
+
+        MDTextField:
+            id: ownpassword
+            hint_text: "Own password"
+            icon_right: "key-chain"
+            size_hint_x: .65
+            font_size: '14sp'
+            pos_hint: {"center_x": 0.5}
+
+
+        MDRectangleFlatButton:
+            text: "Set own password"
+            font_size: '14sp'
+            pos_hint: {"center_x": 0.5, "center_y":0.15}
+            on_press: app.set_own_password()
+
+ 
+
+        Widget:
+            size_hint_y: None
+            height: 80
+
+
+
+
+<DeviceSettingsWindow>:
+	name: "devicesettings"
+    id: devicesettings
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: onedevicebar
+            type_height: "small"
+            overflow_cls: CustomOverFlowMenu()
+            md_bg_color: get_color_from_hex("#21004b")
+            left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+            right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDTopAppBar:
+            title: "Selected Device"
+            overflow_cls: CustomOverFlowMenu()
+            left_action_items: [["keyboard-backspace", lambda x: app.back_to_main_view(), "Back to Trust Settings", "Back to Trust Settings"]]
+            right_action_items:
+                [
+                ["backup-restore", lambda x: app.restore_onedevice_settings_to_factory(), "Restore default settings", "Restore default settings"],
+                ]
+            elevation: 10
+
+
+
+        Widget:
+            size_hint_y: None
+            height: 25
+
+        MDTextField:
+            id: devicetag
+            hint_text: "Device tag"
+            icon_right: "rename-box"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5}
+            mode: "rectangle"
+            required: True
+            on_text_validate: app.save_onedevice_settings()
+
+        Widget:
+            size_hint_y: None
+            height: 25
+
+        MDTextField:
+            id: devicename
+            hint_text: "Device name"
+            icon_right: "desktop-classic"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5}
+            mode: "rectangle"
+            readonly: True
+            on_text_validate: app.save_onedevice_settings()
+
+        Widget:
+            size_hint_y: None
+            height: 25
+
+        MDTextField:
+            id: trustthisdevice
+            hint_text: "Time of trust"
+            icon_right: "lock-clock"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5}
+            mode: "rectangle"
+            input_filter: 'int'
+            required: True
+            on_text_validate: app.save_onedevice_settings()
+
+        Widget:
+            size_hint_y: None
+            height: 25
+
+        FloatLayout:
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.37, "center_y": 0.5}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "One Time Password"
+                color: get_color_from_hex("#21004b")
+
+
+            MDSwitch:
+                id: twofa_switch
+                pos_hint: {'center_x': .73, 'center_y': .5}
+                width: dp(50)
+                on_active: app.on_selectdevice_checkbox_active(*args)
+
+        Widget:
+            size_hint_y: None
+            height: 50
+
+
+        MDRectangleFlatButton:
+            text: "Delete device"
+            font_size: '12sp'
+            pos_hint: {"center_x": 0.5, "center_y":0.5}
+            text_color: 1, 0, 0, 1
+            on_press: app.show_delete_device_dialog()
+
+ 
+
+        Widget:
+            size_hint_y: None
+            height: 60
+
+
+<WebbrowserSettingsWindow>:
+	name: "webbrowser"
+    id: webbrowser
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: browserbar
+            type_height: "small"
+            overflow_cls: CustomOverFlowMenu()
+            md_bg_color: get_color_from_hex("#21004b")
+            left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+            right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDTopAppBar:
+            title: "Primary browser"
+            overflow_cls: CustomOverFlowMenu()
+            left_action_items: [["keyboard-backspace", lambda x: app.back_to_edit_view(), "Back to Selected Page", "Back to Selected Page"]]
+            right_action_items:
+                [
+                ["open-in-app", lambda x: app.check_secure_connection_before_open_and_login(), "Log into this app", "Log into this app"],
+                ]
+            elevation: 10
+
+        Widget:
+            size_hint_y: None
+            height: 50
+
+
+
+        FloatLayout:
+
+            Check:
+                id: default_browser
+                pos_hint: {'center_x': .2, 'center_y': 0.9}
+                on_active: app.on_webbrowser_change_checkbox_active(*args)
+            
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.6, "center_y": 0.9}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "Default browser"
+
+            Check:
+                id: firefox
+                pos_hint: {'center_x': .2, 'center_y': .6}
+                on_active: app.on_webbrowser_change_checkbox_active(*args)
+
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.6, "center_y": 0.6}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "Firefox"
+
+            Check:
+                id: firefox_private
+                pos_hint: {'center_x': .2, 'center_y': .3}
+                on_active: app.on_webbrowser_change_checkbox_active(*args)
+            
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.6, "center_y": 0.3}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "Firefox - private window"
+
+
+            Check:
+                id: applogin
+                pos_hint: {'center_x': .2, 'center_y': 0}
+                on_active: app.on_webbrowser_change_checkbox_active(*args)
+            
+            MDLabel:
+                halign: "center"
+                pos_hint: {"center_x": 0.6, "center_y": 0}
+                theme_text_color: "Primary"
+                font_size: '16sp'
+                text: "Application login"
+
+
+        Widget:
+            size_hint_y: None
+            height: 50
+
+
+
+        Widget:
+            size_hint_y: None
+            height: 150      
+
+ 
+
+
+
+<ApplicationWindow>:
+	name: "application"
+    id: application
+
+	MDBoxLayout:
+		orientation: "vertical"
+		size: root.width, root.height
+
+        MDTopAppBar:
+            id: applicationbar
+            type_height: "small"
+            overflow_cls: CustomOverFlowMenu()
+            md_bg_color: get_color_from_hex("#21004b")
+            left_action_items: [["monitor-share", lambda x: app.check_security_before_launching_robot(), "Browser window login", "Browser window login"]]
+            right_action_items: [["lock-reset", lambda x: app.deactivate(), "Deactivate", "Deactivate"], ["drag-vertical", lambda x: app.add_drag_border(), "Add drag-border", "Add drag-border"], ["close", lambda x: app.application_shutdown(), "Close", "Close"]]
+            elevation: 10
+
+        MDTopAppBar:
+            title: "Application"
+            overflow_cls: CustomOverFlowMenu()
+            left_action_items: [["keyboard-backspace", lambda x: app.back_to_main_view(), "Back to My Pages", "Back to My Pages"]]
+            right_action_items:
+                [
+                ["card-plus-outline", lambda x: x],
+                ]
+            elevation: 10
+
+        Widget:
+            size_hint_y: None
+            height: 20
+
+
+        MDLabel:
+            id: application_label
+            halign: "center"
+            pos_hint: {"center_x": 0.5, "center_y":0.3}
+            theme_text_color: "Primary"
+            font_size: '16sp'
+            color: get_color_from_hex("#D70026")
+
+
+
+        MDTextField:
+            id: application_name
+            hint_text: "Title of application"
+            icon_right: "application-edit-outline"
+            size_hint_x: .65
+            font_size: '16sp'
+            pos_hint: {"center_x": 0.5}
+            mode: "rectangle"
+            on_text_validate: app.add_new_application() 
+       
+
+        Widget:
+            size_hint_y: None
+            height: 100           
+
+
+        Widget:
+            size_hint_y: None
+            height: 100
