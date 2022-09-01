@@ -71,11 +71,6 @@ You can control when to perform these checks, or decide if you want to use this 
 
 
 
-## Videos
-
-I believe that a picture is worth a thousand words, not to mention a video.
-Visuals of the features are available on the [CarryPass demos](https://www.youtube.com/channel/UCtSK10tYJpb1mhcC2K_osEQ) YouTube channel.
-
 
 
 
