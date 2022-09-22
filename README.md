@@ -70,7 +70,10 @@ You can control when to perform these checks, or decide if you want to use this 
 > You should always assume that your passwords have been compromised if you lose the device where your passwords are stored, or the device is stolen. In that case you are advised to change all your passwords.
 
 
+## Videos
 
+I believe that a picture is worth a thousand words, not to mention a video.
+Visuals of the features are available on the [CarryPass demos]([https://www.youtube.com/channel/UCtSK10tYJpb1mhcC2K_osEQ](https://www.dailymotion.com/video/x8dgjq0?playlist=x7kt5t)) Dailymotion channel.
 
 
 
