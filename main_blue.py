@@ -30,7 +30,7 @@ Window.top = maxSize[1]*0.12
 
 
 from kivymd.uix.screen import MDScreen
-from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition, FallOutTransition, WipeTransition
+from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from kivymd.app import MDApp
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.lang import Builder
@@ -1590,6 +1590,7 @@ class CarryPassApp(MDApp):
                         global pwd_x_rate
                         global pwd_y_rate
                         global deciphered_username
+                        global login_key
                         
                         conn = sqlite3.connect("/carrypass_database/master.db")
                         site_data = create_pandas_table("SELECT url, username, salt, pepper, special, two_page, created_time, username_img, password_img, ciphertext, usn_x_ratio, usn_y_ratio, pwd_x_ratio, pwd_y_ratio, ciphertext_two FROM logindata ORDER BY oid", conn)
@@ -1803,6 +1804,7 @@ class CarryPassApp(MDApp):
                 global pwd_x_rate
                 global pwd_y_rate
                 global deciphered_username
+                global login_key
 
                 conn = sqlite3.connect("/carrypass_database/master.db")
                 site_data = create_pandas_table("SELECT url, username, salt, pepper, special, two_page, created_time, username_img, password_img, ciphertext, usn_x_ratio, usn_y_ratio, pwd_x_ratio, pwd_y_ratio, ciphertext_two FROM logindata ORDER BY oid", conn)
@@ -1991,13 +1993,13 @@ class CarryPassApp(MDApp):
 
         def two_page_login(self):
                 global deciphered_username
+                global login_key
                 time.sleep(1)
                 try:
                     screen_width = tk_root.winfo_screenwidth()
                     screen_height = tk_root.winfo_screenheight()
 
                     usernamelocation = pyautogui.locateCenterOnScreen(f"/carrypass_images/{username_img_stored}", confidence=0.9) 
-                
 
                     pyautogui.moveTo(usernamelocation[0], usernamelocation[1]) 
                     
@@ -2013,8 +2015,9 @@ class CarryPassApp(MDApp):
                     pyautogui.press('esc')
                     pyperclip.copy("")
                     pyautogui.press('enter')
+                    time.sleep(1)
                     pyautogui.moveTo(1,1)
-                    time.sleep(0.2)
+                    
                 except:
                     try:
                         pyautogui.click(screen_width/usn_x_rate, screen_height/usn_y_rate)
@@ -2028,8 +2031,9 @@ class CarryPassApp(MDApp):
                         pyautogui.press('esc')
                         pyperclip.copy("")
                         pyautogui.press('enter')
+                        time.sleep(1)
                         pyautogui.moveTo(1,1)
-                        time.sleep(0.2)
+                        
                     except:
                         pass
                 try:
@@ -2049,7 +2053,7 @@ class CarryPassApp(MDApp):
                     pyautogui.press('enter')
                     pyperclip.copy("")
                     self.toast_finished_login()
-                except:
+                except:                   
                     try:
                         pyautogui.click(screen_width/pwd_x_rate, screen_height/pwd_y_rate)
                         pyperclip.copy(login_key)
@@ -2067,7 +2071,6 @@ class CarryPassApp(MDApp):
                         self.show_application()
                         
                     except:
-                        
                         self.show_no_image_dialog()
                         self.show_application()
                         
@@ -2422,6 +2425,7 @@ class CarryPassApp(MDApp):
                 self.timeout_app()
                 timeout_start = time.time()
                 global deciphered_username
+                global login_key
                 global usn_x_rate
                 global usn_y_rate
                 global pwd_x_rate
@@ -2627,7 +2631,6 @@ class CarryPassApp(MDApp):
                     try:
                         time.sleep(3)
                         pyautogui.hotkey('ctrl', 'l')
-                        pyautogui.hotkey('esc')
                         pyautogui.hotkey('win', 'up')
                         pyautogui.hotkey('win', 'up')
                         pyautogui.hotkey('ctrl', '0')
