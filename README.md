@@ -1,6 +1,6 @@
-# CarryPass
+# CarryPass_standalone (only offline desktop app)
 
-CarryPass is the offline password manager with 256-bit AES encryption and time-based one time password for those who appreciate privacy.
+CarryPass_standalone is the offline password manager with 256-bit AES encryption and time-based one time password for those who appreciate privacy.
 
 <p align="center">
 <img src="https://github.com/racz-zoltan/carrypass/blob/main/carrypass_demo_image.png">
